@@ -21,8 +21,11 @@
         android:id="@+id/main_bottomView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="@color/white"
         app:menu="@menu/bottombar_menu"
+        android:elevation="16dp"
+        app:itemTextColor="@color/mainColor"
+        app:itemIconTint="@color/mainColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_frame" />
