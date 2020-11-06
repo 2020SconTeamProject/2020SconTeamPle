@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.sconproject2020.HomeFragment"
+        android:name="com.example.sconproject2020.Home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.example.sconproject2020.CalendarFragment"
+        android:name="com.example.sconproject2020.Calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.sconproject2020.MapFragment"
+        android:name="com.example.sconproject2020.Map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.sconproject2020.SettingFragment"
+        android:name="com.example.sconproject2020.Setting.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
 </navigation>

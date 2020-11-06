@@ -2,19 +2,17 @@ package com.example.sconproject2020;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.sconproject2020.Calendar.CalendarFragment;
+import com.example.sconproject2020.Home.HomeFragment;
+import com.example.sconproject2020.Map.MapFragment;
+import com.example.sconproject2020.Setting.SettingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.main_frame, homeFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.main_frame, calendarFragment).commitAllowingStateLoss();
 
         bottomNavigationView =findViewById(R.id.main_bottomView);
 
