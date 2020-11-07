@@ -26,18 +26,14 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 class SSLConnect {
-    // always verify the host - dont check for certificate
     final  HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
         public boolean verify(String hostname, SSLSession session) {
             return true;
         }
     };
 
-    /**
-     * Trust every server - don't check for any certificate
-     */
     private void trustAllHosts() {
-        // Create a trust manager that does not validate certificate chains
+
         TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return new java.security.cert.X509Certificate[] {};
@@ -54,7 +50,6 @@ class SSLConnect {
             }
         }};
 
-        // Install the all-trusting trust manager
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
@@ -92,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String key="gWKQlqZhHhnPKeS33joGOfyhDsiGaJ9oObhCjJCXlzEsoHHlP6zYiiHL2oPlB1iYLEI77%2BFvoU%2FFeWb5tMkSmw%3D%3D";
         setContentView(R.layout.activity_main);
         SSLConnect ssl = new SSLConnect();
-        ssl.postHttps("https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?ServiceKey=gWKQlqZhHhnPKeS33joGOfyhDsiGaJ9oObhCjJCXlzEsoHHlP6zYiiHL2oPlB1iYLEI77%2BFvoU%2FFeWb5tMkSmw%3D%3D",1000,1000);
+        ssl.postHttps("https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?ServiceKey="+key,1000,1000);
         StrictMode.enableDefaults();
 
-        TextView status1 = (TextView)findViewById(R.id.result); //파싱된 결과확인!
+        TextView status1 = (TextView)findViewById(R.id.result);
 
         boolean CInt = false, CName = false, CRoad = false, CTel = false, CType = false;
 
@@ -105,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         try{
-            URL url = new URL("https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?ServiceKey=gWKQlqZhHhnPKeS33joGOfyhDsiGaJ9oObhCjJCXlzEsoHHlP6zYiiHL2oPlB1iYLEI77%2BFvoU%2FFeWb5tMkSmw%3D%3D"
-            ); //검색 URL부분
+            URL url = new URL("https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?ServiceKey="+key);
 
             XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
             XmlPullParser parser = parserCreator.newPullParser();
@@ -114,50 +109,50 @@ public class MainActivity extends AppCompatActivity {
             parser.setInput(url.openStream(), null);
 
             int parserEvent = parser.getEventType();
-            status1.setText("시작");
+            //status1.setText("시작");
 
             while (parserEvent != XmlPullParser.END_DOCUMENT){
                 switch(parserEvent){
-                    case XmlPullParser.START_TAG://parser가 시작 태그를 만나면 실행
-                        if(parser.getName().equals("CInt")){ //title 만나면 내용을 받을수 있게 하자
+                    case XmlPullParser.START_TAG:
+                        if(parser.getName().equals("CInt")){
                             CInt = true;
                         }
-                        if(parser.getName().equals("CName")){ //cintess 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CName")){
                             CName = true;
                         }
-                        if(parser.getName().equals("CRoad")){ //mapx 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CRoad")){
                             CRoad = true;
                         }
-                        if(parser.getName().equals("CTel")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CTel")){
                             CTel = true;
                         }
-                        if(parser.getName().equals("CType")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CType")){
                             CType = true;
                         }
-                        if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
+                        if(parser.getName().equals("message")){
                             status1.setText("에러");
-                            //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
+
                         }
                         break;
 
-                    case XmlPullParser.TEXT://parser가 내용에 접근했을때
-                        if(CInt){ //isTitle이 true일 때 태그의 내용을 저장.
+                    case XmlPullParser.TEXT:
+                        if(CInt){
                             cint = parser.getText();
                             CInt = false;
                         }
-                        if(CName){ //iscintess이 true일 때 태그의 내용을 저장.
+                        if(CName){
                             cname = parser.getText();
                             CName = false;
                         }
-                        if(CRoad){ //isMapx이 true일 때 태그의 내용을 저장.
+                        if(CRoad){
                             croad = parser.getText();
                             CRoad = false;
                         }
-                        if(CTel){ //isMapy이 true일 때 태그의 내용을 저장.
+                        if(CTel){
                             ctel = parser.getText();
                             CTel = false;
                         }
-                        if(CType){ //isMapy이 true일 때 태그의 내용을 저장.
+                        if(CType){
                              ctype= parser.getText();
                             CType = false;
                         }
