@@ -16,13 +16,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/main_bottomView"
         />
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/calendar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="181dp" />
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_bottomView"
