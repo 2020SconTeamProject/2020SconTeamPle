@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
-
     BottomNavigationView bottomNavigationView;
     private HomeFragment homeFragment = new HomeFragment();
     private CalendarFragment calendarFragment = new CalendarFragment();
