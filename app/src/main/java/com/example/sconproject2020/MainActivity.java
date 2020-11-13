@@ -16,8 +16,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FragmentManager fragmentManager = getSupportFragmentManager();
 
+
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     BottomNavigationView bottomNavigationView;
     private HomeFragment homeFragment = new HomeFragment();
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.main_frame, calendarFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.main_frame, homeFragment).commitAllowingStateLoss();
 
         bottomNavigationView =findViewById(R.id.main_bottomView);
 
