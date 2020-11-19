@@ -30,6 +30,43 @@
                 android:textStyle="bold"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재 할 일 : "
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:id="@+id/now"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@id/topLayout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/nowTodoTv"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="학교 보내기"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:id="@+id/nowTodoTv"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@id/topLayout"
+            app:layout_constraintLeft_toRightOf="@id/now"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/now"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/recyclerView"
+            tools:listitem="@layout/home_recycler_item"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
