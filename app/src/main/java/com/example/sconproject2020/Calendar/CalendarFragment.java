@@ -1,6 +1,8 @@
 package com.example.sconproject2020.Calendar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,7 +44,8 @@ public class CalendarFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-    private int year, month, day;
+    private int year, month, day, date;
+    private String json;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,13 +64,14 @@ public class CalendarFragment extends Fragment {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        int date = (year*10000)+(month*100)+day;
+        date = (year*10000)+(month*100)+day;
         Log.e("text",""+date);
-        String json = sharedPreferences.getString(""+date,null);
+        json = sharedPreferences.getString(""+date,null);
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<CalendarRecyclerItem>>(){}.getType();
         if(json != null){
-            dataArray = gson.fromJson(json, type);
+            dataArray.clear();
+            dataArray.addAll(gson.fromJson(json, type));
         }
         else{
             dataArray.clear();
@@ -80,6 +84,41 @@ public class CalendarFragment extends Fragment {
 
         checkArray();
 
+        adapter.setOnItemClickListener(new CalendarRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+
+            }
+
+            @Override
+            public void onItemLongClick(View v, int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("계획 삭제");
+                builder.setMessage("계획을 삭제하시겠습니까?");
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dataArray.remove(position);
+                        Gson gson = new Gson();
+                        String jsonText = gson.toJson(dataArray);
+                        editor.putString(""+date,jsonText);
+                        editor.apply();
+
+                        adapter.notifyDataSetChanged();
+
+                        checkArray();
+                    }
+                });
+                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.show();
+            }
+        });
+
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
@@ -89,25 +128,23 @@ public class CalendarFragment extends Fragment {
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
                 day = calendar.get(Calendar.DAY_OF_MONTH);
-                int date = (year*10000)+(month*100)+ day;
-                String text = ""+date;
-                String json = sharedPreferences.getString(text,null);
+                date = (year*10000)+(month*100)+ day;
+                json = sharedPreferences.getString(""+date,null);
                 Gson gson = new Gson();
                 Type type = new TypeToken<ArrayList<CalendarRecyclerItem>>(){}.getType();
                 if(json != null){
-                    dataArray = gson.fromJson(json, type);
+                    dataArray.clear();
+                    dataArray.addAll(gson.fromJson(json, type));
                     Log.e("contents",json);
                 }
                 else{
                     dataArray.clear();
                 }
 
-                Log.e("text",text);
                 Log.e("size",""+dataArray.size());
                 checkArray();
 
-                adapter = new CalendarRecyclerAdapter(dataArray);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -121,6 +158,7 @@ public class CalendarFragment extends Fragment {
                 startActivityForResult(intent, 1);
             }
         });
+
         return view;
     }
 
@@ -185,13 +223,13 @@ public class CalendarFragment extends Fragment {
             Gson gson = new Gson();
             Type type = new TypeToken<ArrayList<CalendarRecyclerItem>>(){}.getType();
             if(json != null){
-                dataArray = gson.fromJson(json, type);
+                dataArray.clear();
+                dataArray.addAll(gson.fromJson(json, type));
             }
             else{
                 dataArray.clear();
             }
-            adapter = new CalendarRecyclerAdapter(dataArray);
-            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
 
             checkArray();
         }

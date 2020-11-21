@@ -1,11 +1,13 @@
 package com.example.sconproject2020.Calendar;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,17 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
     public CalendarRecyclerAdapter(ArrayList<CalendarRecyclerItem> mData) {
         this.mData = mData;
     }
+
+    private OnItemClickListener mListener = null;
+
+    public interface OnItemClickListener{
+        void onItemClick(View v, int position);
+        void onItemLongClick(View v, int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener mListener){
+        this.mListener = mListener;
+    }
+
 
     @NonNull
     @Override
@@ -54,6 +67,20 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
 
             checkBox = itemView.findViewById(R.id.checkBox);
             textView = itemView.findViewById(R.id.todoTextView);
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+                    Log.e("롱클릭",""+pos);
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onItemLongClick(view, pos);
+                        }
+                    }
+                    return  true;
+                }
+            });
         }
     }
 }
