@@ -110,29 +110,22 @@
         android:id="@+id/Okbtn"
         />
 
-<!--    <CheckBox-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/setAlarmChkbox"-->
-<!--        app:layout_constraintLeft_toLeftOf="@id/fromLayout"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/Okbtn"-->
-<!--        />-->
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="알람 설정"-->
-<!--        app:layout_constraintLeft_toRightOf="@id/setAlarmChkbox"-->
-<!--        app:layout_constraintTop_toTopOf="@id/setAlarmChkbox"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/setAlarmChkbox"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="15sp"/>-->
-<!--    <TimePicker-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/setAlarmChkbox"-->
-<!--        app:layout_constraintLeft_toLeftOf="@id/setAlarmChkbox"-->
-<!--        app:layout_constraintRight_toRightOf="@id/Okbtn"-->
-<!--        android:id="@+id/timepicker"/>-->
+    <CheckBox
+        android:id="@+id/setAlarmChkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/fromLayout"
+        app:layout_constraintTop_toTopOf="@id/Okbtn" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알람 설정"
+        android:id="@+id/alarmTv"
+        app:layout_constraintLeft_toRightOf="@id/setAlarmChkbox"
+        app:layout_constraintTop_toTopOf="@id/setAlarmChkbox"
+        app:layout_constraintBottom_toBottomOf="@id/setAlarmChkbox"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

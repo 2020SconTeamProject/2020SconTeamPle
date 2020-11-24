@@ -5,6 +5,23 @@ public class CalendarRecyclerItem {
     String todo ;
     String startDate;
     String endDate;
+    int alarmHour = -1, alarmMinute = -1;
+
+    public int getAlarmHour() {
+        return alarmHour;
+    }
+
+    public void setAlarmHour(int alarmHour) {
+        this.alarmHour = alarmHour;
+    }
+
+    public int getAlarmMinute() {
+        return alarmMinute;
+    }
+
+    public void setAlarmMinute(int alarmMinute) {
+        this.alarmMinute = alarmMinute;
+    }
 
     public String getStartDate() {
         return startDate;
@@ -27,6 +44,15 @@ public class CalendarRecyclerItem {
         this.todo = todo;
         this.startDate = fromTime;
         this.endDate = toTime;
+    }
+
+    public CalendarRecyclerItem(boolean isChecked, String todo, String startDate, String endDate, int alarmHour, int alarmMinute) {
+        this.isChecked = isChecked;
+        this.todo = todo;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.alarmHour = alarmHour;
+        this.alarmMinute = alarmMinute;
     }
 
     public boolean isChecked() {

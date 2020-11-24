@@ -89,7 +89,35 @@ public class CalendarFragment extends Fragment {
         adapter.setOnItemClickListener(new CalendarRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+                Log.e("calendar","onClick");
+                CalendarRecyclerItem item = dataArray.get(position);
+                String planName = item.getTodo();
+                String startDate = item.getStartDate();
+                String endDate = item.getEndDate();
+                String isAlarmSet;
+                if(item.getAlarmHour() == -1){
+                    isAlarmSet = "X";
+                }
+                else{
+                    isAlarmSet = "O";
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("계획 내용");
+                builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
+                        +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet);
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
+                    }
+                });
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.show();
             }
 
             //리사이클러뷰의 항목을 길게누르면 삭제여부를 물어보는 다이얼로그를 띄움
@@ -178,10 +206,16 @@ public class CalendarFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode==100){
-            String startDate, endDate, name;
-            name = data.getStringExtra("name");
-            startDate = data.getStringExtra("startDate");
-            endDate = data.getStringExtra("endDate");
+            String name = data.getStringExtra("name");
+            String startDate = data.getStringExtra("startDate");
+            String endDate = data.getStringExtra("endDate");
+
+            int alarmHour = -1, alarmMinute = -1;
+            alarmHour = Integer.parseInt(data.getStringExtra("alarmHour"));
+            alarmMinute = Integer.parseInt(data.getStringExtra("alarmMinute"));
+
+            Log.e("h",""+alarmHour);
+            Log.e("m",""+alarmMinute);
 
             String[] startArr, endArr;
             startArr = startDate.split("/");
@@ -202,7 +236,7 @@ public class CalendarFragment extends Fragment {
             for(int i=fromDate;i<=toDate;i++){
                 String json = sharedPreferences.getString(""+i,null);
                 ArrayList<CalendarRecyclerItem> array;
-                CalendarRecyclerItem item = new CalendarRecyclerItem(false, name, startDate, endDate);
+                CalendarRecyclerItem item = new CalendarRecyclerItem(false, name, startDate, endDate, alarmHour, alarmMinute);
                 Gson gson = new Gson();
                 Type type = new TypeToken<ArrayList<CalendarRecyclerItem>>(){}.getType();
                 if(json != null){
@@ -225,12 +259,9 @@ public class CalendarFragment extends Fragment {
             String json = sharedPreferences.getString(""+date,null);
             Gson gson = new Gson();
             Type type = new TypeToken<ArrayList<CalendarRecyclerItem>>(){}.getType();
+            dataArray.clear();
             if(json != null){
-                dataArray.clear();
                 dataArray.addAll(gson.fromJson(json, type));
-            }
-            else{
-                dataArray.clear();
             }
             adapter.notifyDataSetChanged();
 

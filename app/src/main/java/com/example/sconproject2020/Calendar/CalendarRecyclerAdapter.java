@@ -67,6 +67,17 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
 
             checkBox = itemView.findViewById(R.id.checkBox);
             textView = itemView.findViewById(R.id.todoTextView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onItemClick(view, pos);
+                        }
+                    }
+                }
+            });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

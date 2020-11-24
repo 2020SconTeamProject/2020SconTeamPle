@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.TimeAnimator;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.sconproject2020.R;
@@ -22,7 +27,9 @@ public class PlanAddActivity extends AppCompatActivity {
     EditText nameInput, startDateInput, endDateInput;
     Button okBtn;
     int year, month, day;
-    int starty, startm, startd, endy, endm, endd;
+    CheckBox setAlarmChkBox;
+    TextView alarmTv;
+    int alarmHour = -1, alarmMinute = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,8 @@ public class PlanAddActivity extends AppCompatActivity {
         startDateInput = findViewById(R.id.fromEditText);
         endDateInput = findViewById(R.id.ToEditText);
         okBtn = findViewById(R.id.Okbtn);
+        setAlarmChkBox = findViewById(R.id.setAlarmChkbox);
+        alarmTv = findViewById(R.id.alarmTv);
 
         Intent intent = getIntent();
         year = intent.getIntExtra("year",0);
@@ -54,6 +63,28 @@ public class PlanAddActivity extends AppCompatActivity {
                 DatePickerDialog dialog = new
                         DatePickerDialog(PlanAddActivity.this, endDateListener, year, month, day);
                 dialog.show();
+            }
+        });
+
+        setAlarmChkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    Log.e("chk","true");
+                    Log.e("button",""+compoundButton.isChecked());
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(PlanAddActivity.this, setTimeListener, 0, 0, false);
+                    timePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            setAlarmChkBox.setChecked(false);
+                            Log.e("cancel","cancel");
+                        }
+                    });
+                    timePickerDialog.show();
+                }
+                else{
+                    alarmTv.setText("알람 설정");
+                }
             }
         });
 
@@ -84,6 +115,8 @@ public class PlanAddActivity extends AppCompatActivity {
                     intent.putExtra("name", name);
                     intent.putExtra("startDate", startDate);
                     intent.putExtra("endDate", endDate);
+                    intent.putExtra("alarmHour",""+alarmHour);
+                    intent.putExtra("alarmMinute",""+alarmMinute);
                     setResult(100, intent);
                     finish();
                 }
@@ -107,6 +140,17 @@ public class PlanAddActivity extends AppCompatActivity {
             m = m + 1;
 
             endDateInput.setText(""+y+"/"+m+"/"+d);
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener setTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            alarmHour = hour;
+            alarmMinute = minute;
+
+            alarmTv.setText(""+alarmHour+":"+alarmMinute);
+
         }
     };
 }
