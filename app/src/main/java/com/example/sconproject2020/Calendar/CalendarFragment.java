@@ -60,6 +60,8 @@ public class CalendarFragment extends Fragment {
         addBtn = view.findViewById(R.id.planAddBtn);
         noPlanTv = view.findViewById(R.id.noPlanTv);
 
+        //CalendarFragment를 불러올때는 DayClickListener가 작동하지 않기 때문에
+        //현재 날짜를 불러와 recyclerview에 띄워준다.
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -90,6 +92,7 @@ public class CalendarFragment extends Fragment {
 
             }
 
+            //리사이클러뷰의 항목을 길게누르면 삭제여부를 물어보는 다이얼로그를 띄움
             @Override
             public void onItemLongClick(View v, int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
