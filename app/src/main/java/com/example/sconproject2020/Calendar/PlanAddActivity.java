@@ -76,7 +76,7 @@ public class PlanAddActivity extends AppCompatActivity {
                     timePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
-                            setAlarmChkBox.setChecked(false);
+                               setAlarmChkBox.setChecked(false);
                             Log.e("cancel","cancel");
                         }
                     });
@@ -94,6 +94,7 @@ public class PlanAddActivity extends AppCompatActivity {
                 String name = nameInput.getText().toString();
                 String startDate = startDateInput.getText().toString();
                 String endDate = endDateInput.getText().toString();
+
                 if (name.equals("")){
                     nameInput.setError("이름을 입력하세요");
                 }
@@ -105,20 +106,24 @@ public class PlanAddActivity extends AppCompatActivity {
                 }
                 else {
                     String[] sarr, earr;
+                    sarr = startDate.split("/");
+                    earr = endDate.split("/");
+                    int start = (Integer.parseInt(sarr[0])*10000) + (Integer.parseInt(sarr[1])*100) + (Integer.parseInt(sarr[2]));
+                    int end = (Integer.parseInt(earr[0])*10000) + (Integer.parseInt(earr[1])*100) + (Integer.parseInt(earr[2]));
 
-                    sarr = startDate.split(" ");
-                    startDate = sarr[0];
+                    if(start > end){
+                        endDateInput.setError("종료 날짜가 더 빠릅니다.");
+                    }
+                    else{
+                        intent.putExtra("name", name);
+                        intent.putExtra("startDate", startDate);
+                        intent.putExtra("endDate", endDate);
+                        intent.putExtra("alarmHour",""+alarmHour);
+                        intent.putExtra("alarmMinute",""+alarmMinute);
 
-                    earr = endDate.split(" ");
-                    endDate = earr[0];
-
-                    intent.putExtra("name", name);
-                    intent.putExtra("startDate", startDate);
-                    intent.putExtra("endDate", endDate);
-                    intent.putExtra("alarmHour",""+alarmHour);
-                    intent.putExtra("alarmMinute",""+alarmMinute);
-                    setResult(100, intent);
-                    finish();
+                        setResult(100, intent);
+                        finish();
+                    }
                 }
             }
         });
