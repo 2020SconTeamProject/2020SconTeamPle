@@ -66,6 +66,13 @@ public class PlanAddActivity extends AppCompatActivity {
             }
         });
 
+        alarmTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAlarmChkBox.setChecked(!setAlarmChkBox.isChecked());
+            }
+        });
+
         setAlarmChkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
