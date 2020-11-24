@@ -104,14 +104,23 @@ public class CalendarFragment extends Fragment {
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("계획 내용");
-                builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
-                        +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet);
+                if(isAlarmSet.equals("O")){
+                    String alarmTime = ""+item.getAlarmHour()+":"+item.getAlarmMinute();
+                    builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
+                            +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet+"\n알람 시간 : "+alarmTime);
+                }
+                else{
+                    builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
+                            +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet);
+                }
+
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
+                builder.show();
             }
 
             //리사이클러뷰의 항목을 길게누르면 삭제여부를 물어보는 다이얼로그를 띄움
@@ -141,6 +150,15 @@ public class CalendarFragment extends Fragment {
                     }
                 });
                 builder.show();
+            }
+        });
+        adapter.setOnCheckedChangedListener(new CalendarRecyclerAdapter.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChanged(boolean isChecked, int position) {
+                dataArray.get(position).setChecked(isChecked);
+                String jsonText = gson.toJson(dataArray);
+                editor.putString(""+date,jsonText);
+                editor.apply();
             }
         });
 

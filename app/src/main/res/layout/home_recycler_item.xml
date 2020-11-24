@@ -17,6 +17,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/subColor"
             android:id="@+id/home_chkbox" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

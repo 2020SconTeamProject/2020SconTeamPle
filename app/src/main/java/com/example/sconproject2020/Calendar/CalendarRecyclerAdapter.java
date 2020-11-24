@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,14 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
     }
 
     private OnItemClickListener mListener = null;
+    private OnCheckedChangedListener checkedChangedListener = null;
+
+    public interface OnCheckedChangedListener{
+        void onCheckedChanged(boolean isChecked, int position);
+    }
+    public void setOnCheckedChangedListener(OnCheckedChangedListener listener){
+        this.checkedChangedListener = listener;
+    }
 
     public interface OnItemClickListener{
         void onItemClick(View v, int position);
@@ -67,6 +76,21 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
 
             checkBox = itemView.findViewById(R.id.checkBox);
             textView = itemView.findViewById(R.id.todoTextView);
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    int pos = getAdapterPosition();
+                    Log.e("pos",""+pos);
+
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(checkedChangedListener != null){
+                            checkedChangedListener.onCheckedChanged(b, pos);
+                        }
+                    }
+                }
+            });
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

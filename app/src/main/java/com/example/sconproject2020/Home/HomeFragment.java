@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.sconproject2020.Calendar.CalendarRecyclerAdapter;
 import com.example.sconproject2020.Calendar.CalendarRecyclerItem;
 import com.example.sconproject2020.R;
 import com.google.gson.Gson;
@@ -127,6 +128,16 @@ public class HomeFragment extends Fragment {
             noPlanTextView.setText("계획이 없습니다.");
         }
         adapter.notifyDataSetChanged();
+
+        adapter.setOnCheckedChangedListener(new CalendarRecyclerAdapter.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChanged(boolean isChecked, int position) {
+                calArr.get(position).setChecked(isChecked);
+                String jsonText = gson.toJson(calArr);
+                editor.putString(""+date,jsonText);
+                editor.apply();
+            }
+        });
 
         if(dataArray.size() != 0){
             nowTodoTextView.setText("현재 할 일 : "+dataArray.get(0).getTodo());
