@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SconProject2020</string>
+    <string-array name="a">
+        <item>asdasda</item>
+    </string-array>
 </resources>

@@ -1,5 +1,10 @@
 package com.example.sconproject2020;
 
+import android.os.Bundle;
+import android.util.Pair;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -10,166 +15,90 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-class SSLConnect {
-    final  HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
-    };
-
-    private void trustAllHosts() {
-
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[] {};
-            }
-
-            @Override
-            public void checkClientTrusted(X509Certificate[] chain,
-                                           String authType) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] chain,
-                                           String authType) throws CertificateException {
-            }
-        }};
-
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public HttpsURLConnection postHttps(String url, int connTimeout, int readTimeout) {
-        trustAllHosts();
-
-        HttpsURLConnection https = null;
-        try {
-            https = (HttpsURLConnection) new URL(url).openConnection();
-            https.setHostnameVerifier(DO_NOT_VERIFY);
-            https.setConnectTimeout(connTimeout);
-            https.setReadTimeout(readTimeout);
-        }
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return https;
-    }
-}
+import android.widget.SimpleAdapter;
 
 public class MainActivity extends AppCompatActivity {
+    private List<String> asd;
+    private TextView tv;
+    private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String key="gWKQlqZhHhnPKeS33joGOfyhDsiGaJ9oObhCjJCXlzEsoHHlP6zYiiHL2oPlB1iYLEI77%2BFvoU%2FFeWb5tMkSmw%3D%3D";
         setContentView(R.layout.activity_main);
-        SSLConnect ssl = new SSLConnect();
-        ssl.postHttps("https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?ServiceKey="+key,1000,1000);
-        StrictMode.enableDefaults();
+        tv = (TextView) findViewById(R.id.xmltext);
+        lv = (ListView) findViewById(R.id.xmllist);
+        InputStream inputStream = getResources().openRawResource(R.raw.res);
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader reader = new BufferedReader(inputStreamReader);
+        XmlPullParserFactory factory = null;
+        XmlPullParser xpp = null;
+        List<String> REFINE_WGS84_LAT = new ArrayList<>();
+        List<String> REFINE_WGS84_LOGT = new ArrayList<>();
+        List<String> FACLT_NM = new ArrayList<>();
 
-        TextView status1 = (TextView)findViewById(R.id.result);
+        String adsf = null;
+        int c1=0,c2=0,c3 = 0;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            xpp = factory.newPullParser();
+            xpp.setInput(reader);
+            int parserEvent = xpp.getEventType();
+            Log.e("asd", xpp.getName() + "");
+            while (parserEvent != XmlPullParser.END_DOCUMENT) {
+//                Log.e("asd",xpp.getName());
+//                Log.e("asd",xpp.getText());
+                //  Log.d("asd",xpp.getEventType()+"");
 
-        boolean CInt = false, CName = false, CRoad = false, CTel = false, CType = false;
-
-        String cint = null, cname = null, croad = null, ctel = null, ctype = null;
-
-
-        try{
-            URL url = new URL("https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?ServiceKey="+key);
-
-            XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = parserCreator.newPullParser();
-
-            parser.setInput(url.openStream(), null);
-
-            int parserEvent = parser.getEventType();
-            //status1.setText("시작");
-
-            while (parserEvent != XmlPullParser.END_DOCUMENT){
-                switch(parserEvent){
+                switch (parserEvent) {
                     case XmlPullParser.START_TAG:
-                        if(parser.getName().equals("CInt")){
-                            CInt = true;
+                        //  Log.e("asd",xpp.getEventType()+"");
+                        if (xpp.getName().equals("REFINE_WGS84_LAT")) {
+                            parserEvent = xpp.next();
+                            Log.e("asddf",parserEvent+"");
+                            if (parserEvent == XmlPullParser.TEXT) {
+                                adsf = xpp.getText();
+                                REFINE_WGS84_LAT.add(adsf);
+                                Log.e("lat", "value : " + REFINE_WGS84_LAT.get(c1));
+                                c1++;
+                            }
                         }
-                        if(parser.getName().equals("CName")){
-                            CName = true;
+                        else if (xpp.getName().equals("REFINE_WGS84_LOGT")){
+                            parserEvent = xpp.next();
+                            if (parserEvent == XmlPullParser.TEXT) {
+                                adsf = xpp.getText();
+                                REFINE_WGS84_LOGT.add(adsf);
+                                Log.e("logt",  "value : " + REFINE_WGS84_LOGT.get(c2));
+                                c2++;
+                            }
                         }
-                        if(parser.getName().equals("CRoad")){
-                            CRoad = true;
+                        else if (xpp.getName().equals("FACLT_NM")){
+                            parserEvent = xpp.next();
+                            if (parserEvent == XmlPullParser.TEXT) {
+                                adsf = xpp.getText();
+                                FACLT_NM.add(adsf);
+                                Log.e("name",  "value : " + FACLT_NM.get(c3));
+                                c3++;
+                            }
                         }
-                        if(parser.getName().equals("CTel")){
-                            CTel = true;
-                        }
-                        if(parser.getName().equals("CType")){
-                            CType = true;
-                        }
-                        if(parser.getName().equals("message")){
-                            status1.setText("에러");
-
-                        }
-                        break;
-
-                    case XmlPullParser.TEXT:
-                        if(CInt){
-                            cint = parser.getText();
-                            CInt = false;
-                        }
-                        if(CName){
-                            cname = parser.getText();
-                            CName = false;
-                        }
-                        if(CRoad){
-                            croad = parser.getText();
-                            CRoad = false;
-                        }
-                        if(CTel){
-                            ctel = parser.getText();
-                            CTel = false;
-                        }
-                        if(CType){
-                             ctype= parser.getText();
-                            CType = false;
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        if(parser.getName().equals("item")){
-                            status1.append("1 : "+ cint +"\n 2: "+ cname +"\n 3 : " + croad
-                                    +"\n 4 : " + ctel +  "\n 5 : " +ctype);
-                        }
-                        break;
+//
                 }
-                parserEvent = parser.next();
+                parserEvent = xpp.next();
             }
-        } catch(Exception e){
-            status1.setText("실패");
-            Toast.makeText(this, ""+e, Toast.LENGTH_SHORT).show();
-            Log.e("mainActiviy:",""+e);
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
         }
     }
 }
