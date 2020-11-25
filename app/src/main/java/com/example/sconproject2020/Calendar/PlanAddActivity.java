@@ -20,7 +20,9 @@ import android.widget.TimePicker;
 
 import com.example.sconproject2020.R;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.util.Calendar;
 
 public class PlanAddActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class PlanAddActivity extends AppCompatActivity {
     CheckBox setAlarmChkBox;
     TextView alarmTv;
     int alarmHour = -1, alarmMinute = -1;
+    int hour, minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +82,10 @@ public class PlanAddActivity extends AppCompatActivity {
                 if(b){
                     Log.e("chk","true");
                     Log.e("button",""+compoundButton.isChecked());
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(PlanAddActivity.this, setTimeListener, 0, 0, false);
+                    java.util.Date date = Calendar.getInstance().getTime();
+                    Log.e("hour",""+date.getHours());
+                    Log.e("minute",""+date.getMinutes());
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(PlanAddActivity.this, setTimeListener, date.getHours(), date.getMinutes(), false);
                     timePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
