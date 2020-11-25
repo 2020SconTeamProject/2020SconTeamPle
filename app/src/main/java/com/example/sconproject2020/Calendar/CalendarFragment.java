@@ -1,10 +1,13 @@
 package com.example.sconproject2020.Calendar;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -18,20 +21,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.sconproject2020.Home.AlarmReceiver;
 import com.example.sconproject2020.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class CalendarFragment extends Fragment {
 
@@ -103,15 +104,17 @@ public class CalendarFragment extends Fragment {
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("계획 내용");
-                builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
-                        +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet);
-                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                if(isAlarmSet.equals("O")){
+                    String alarmTime = ""+item.getAlarmHour()+":"+item.getAlarmMinute();
+                    builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
+                            +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet+"\n알람 시간 : "+alarmTime);
+                }
+                else{
+                    builder.setMessage("계획 이름 : "+planName+"\n계획 시작 날짜 : "
+                            +startDate+"\n계획 종료 날짜 : "+endDate+"\n알람 설정 여부 : "+isAlarmSet);
+                }
 
-                    }
-                });
-                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -147,6 +150,15 @@ public class CalendarFragment extends Fragment {
                     }
                 });
                 builder.show();
+            }
+        });
+        adapter.setOnCheckedChangedListener(new CalendarRecyclerAdapter.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChanged(boolean isChecked, int position) {
+                dataArray.get(position).setChecked(isChecked);
+                String jsonText = gson.toJson(dataArray);
+                editor.putString(""+date,jsonText);
+                editor.apply();
             }
         });
 

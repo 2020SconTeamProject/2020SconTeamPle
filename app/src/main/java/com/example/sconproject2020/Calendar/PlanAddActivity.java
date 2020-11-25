@@ -20,7 +20,9 @@ import android.widget.TimePicker;
 
 import com.example.sconproject2020.R;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.util.Calendar;
 
 public class PlanAddActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class PlanAddActivity extends AppCompatActivity {
     CheckBox setAlarmChkBox;
     TextView alarmTv;
     int alarmHour = -1, alarmMinute = -1;
+    int hour, minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +69,27 @@ public class PlanAddActivity extends AppCompatActivity {
             }
         });
 
+        alarmTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAlarmChkBox.setChecked(!setAlarmChkBox.isChecked());
+            }
+        });
+
         setAlarmChkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     Log.e("chk","true");
                     Log.e("button",""+compoundButton.isChecked());
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(PlanAddActivity.this, setTimeListener, 0, 0, false);
+                    java.util.Date date = Calendar.getInstance().getTime();
+                    Log.e("hour",""+date.getHours());
+                    Log.e("minute",""+date.getMinutes());
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(PlanAddActivity.this, setTimeListener, date.getHours(), date.getMinutes(), false);
                     timePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
-                            setAlarmChkBox.setChecked(false);
+                               setAlarmChkBox.setChecked(false);
                             Log.e("cancel","cancel");
                         }
                     });
@@ -94,6 +107,7 @@ public class PlanAddActivity extends AppCompatActivity {
                 String name = nameInput.getText().toString();
                 String startDate = startDateInput.getText().toString();
                 String endDate = endDateInput.getText().toString();
+
                 if (name.equals("")){
                     nameInput.setError("이름을 입력하세요");
                 }
@@ -105,20 +119,24 @@ public class PlanAddActivity extends AppCompatActivity {
                 }
                 else {
                     String[] sarr, earr;
+                    sarr = startDate.split("/");
+                    earr = endDate.split("/");
+                    int start = (Integer.parseInt(sarr[0])*10000) + (Integer.parseInt(sarr[1])*100) + (Integer.parseInt(sarr[2]));
+                    int end = (Integer.parseInt(earr[0])*10000) + (Integer.parseInt(earr[1])*100) + (Integer.parseInt(earr[2]));
 
-                    sarr = startDate.split(" ");
-                    startDate = sarr[0];
+                    if(start > end){
+                        endDateInput.setError("종료 날짜가 더 빠릅니다.");
+                    }
+                    else{
+                        intent.putExtra("name", name);
+                        intent.putExtra("startDate", startDate);
+                        intent.putExtra("endDate", endDate);
+                        intent.putExtra("alarmHour",""+alarmHour);
+                        intent.putExtra("alarmMinute",""+alarmMinute);
 
-                    earr = endDate.split(" ");
-                    endDate = earr[0];
-
-                    intent.putExtra("name", name);
-                    intent.putExtra("startDate", startDate);
-                    intent.putExtra("endDate", endDate);
-                    intent.putExtra("alarmHour",""+alarmHour);
-                    intent.putExtra("alarmMinute",""+alarmMinute);
-                    setResult(100, intent);
-                    finish();
+                        setResult(100, intent);
+                        finish();
+                    }
                 }
             }
         });
