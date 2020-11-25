@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader reader = new BufferedReader(inputStreamReader);
         XmlPullParserFactory factory = null;
         XmlPullParser xpp = null;
-        List<String> REFINE_WGS84_LAT = new ArrayList<>();
-        List<String> REFINE_WGS84_LOGT = new ArrayList<>();
-        List<String> FACLT_NM = new ArrayList<>();
+        List<String> latitude = new ArrayList<>();
+        List<String> longitude = new ArrayList<>();
+        List<String> NAME = new ArrayList<>();
 
-        String adsf = null;
+        String buffer = null;
         int c1=0,c2=0,c3 = 0;
         try {
             factory = XmlPullParserFactory.newInstance();
@@ -58,38 +58,33 @@ public class MainActivity extends AppCompatActivity {
             int parserEvent = xpp.getEventType();
             Log.e("asd", xpp.getName() + "");
             while (parserEvent != XmlPullParser.END_DOCUMENT) {
-//                Log.e("asd",xpp.getName());
-//                Log.e("asd",xpp.getText());
-                //  Log.d("asd",xpp.getEventType()+"");
-
                 switch (parserEvent) {
                     case XmlPullParser.START_TAG:
                         //  Log.e("asd",xpp.getEventType()+"");
                         if (xpp.getName().equals("REFINE_WGS84_LAT")) {
                             parserEvent = xpp.next();
-                            Log.e("asddf",parserEvent+"");
                             if (parserEvent == XmlPullParser.TEXT) {
-                                adsf = xpp.getText();
-                                REFINE_WGS84_LAT.add(adsf);
-                                Log.e("lat", "value : " + REFINE_WGS84_LAT.get(c1));
+                                buffer = xpp.getText();
+                                latitude.add(buffer);
+                                Log.e("lat", "value : "+c1 +"  "+ latitude.get(c1));
                                 c1++;
                             }
                         }
                         else if (xpp.getName().equals("REFINE_WGS84_LOGT")){
                             parserEvent = xpp.next();
                             if (parserEvent == XmlPullParser.TEXT) {
-                                adsf = xpp.getText();
-                                REFINE_WGS84_LOGT.add(adsf);
-                                Log.e("logt",  "value : " + REFINE_WGS84_LOGT.get(c2));
+                                buffer = xpp.getText();
+                                longitude.add(buffer);
+                                Log.e("logt",  "value : "+c2 +"  " + longitude.get(c2));
                                 c2++;
                             }
                         }
-                        else if (xpp.getName().equals("FACLT_NM")){
+                        else if (xpp.getName().equals("FACLT_NM")||xpp.getName().equals("BIZPLC_NM")||xpp.getName().equals("PLAY_FACLT_NM")){
                             parserEvent = xpp.next();
                             if (parserEvent == XmlPullParser.TEXT) {
-                                adsf = xpp.getText();
-                                FACLT_NM.add(adsf);
-                                Log.e("name",  "value : " + FACLT_NM.get(c3));
+                                buffer = xpp.getText();
+                                NAME.add(buffer);
+                                Log.e("name",  "value : "+c3 +"  " + NAME.get(c3));
                                 c3++;
                             }
                         }
