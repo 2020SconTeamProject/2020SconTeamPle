@@ -34,7 +34,7 @@
         <com.google.android.gms.maps.MapView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintDimensionRatio="1:0.85"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             app:layout_constraintTop_toBottomOf="@+id/topLayout"/>
@@ -49,18 +49,35 @@
                 android:id="@+id/kindergardenCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="유치원"
+                android:text="어린이집"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 />
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="키즈카페"
-                android:id="@+id/kidsCafeCheckbox"
+                android:text="유치원"
+                android:id="@+id/kidHouseCheckbox"
                 app:layout_constraintTop_toBottomOf="@id/kindergardenCheckbox"
                 app:layout_constraintLeft_toLeftOf="parent"
                 />
+            <CheckBox
+                android:id="@+id/kidCafeCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="키즈카페"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="놀이터"
+                android:id="@+id/playGroundCheckbox"
+                app:layout_constraintTop_toBottomOf="@id/kidCafeCheckbox"
+                app:layout_constraintLeft_toLeftOf="@id/kidCafeCheckbox"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
