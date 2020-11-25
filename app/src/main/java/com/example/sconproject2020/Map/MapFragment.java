@@ -90,18 +90,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             playGround.add(new Facility(nameArr.get(i), latitudeArr.get(i), longitudeArr.get(i)));
         }
 
-//        Log.e("kd",""+kidHouse.size());
-//        Log.e("kc",""+kidCafe.size());
-//        Log.e("kg",""+kinderGarden.size());
-//        Log.e("pg",""+playGround.size());
-//
-//        for(int i=0;i<50;i++){
-//
-//            Log.e("Outname"+i,playGround.get(i).getName());
-//            Log.e("Outlatitude"+i,playGround.get(i).getLatitude());
-//            Log.e("Outlongitude"+i,playGround.get(i).getLongitude());
-//        }
-
         return view;
     }
 
@@ -127,7 +115,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         parserEvent = xpp.next();
                         if (parserEvent == XmlPullParser.TEXT) {
                             latitude = xpp.getText();
-                            Log.e("latitude"+c1,latitude);
                             latitudeArr.add(latitude);
                             c1++;
                         }
@@ -136,7 +123,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         parserEvent = xpp.next();
                         if (parserEvent == XmlPullParser.TEXT) {
                             longitude = xpp.getText();
-                            Log.e("longitude"+c2,longitude);
                             longitudeArr.add(longitude);
                             c2++;
                         }
@@ -145,7 +131,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         parserEvent = xpp.next();
                         if (parserEvent == XmlPullParser.TEXT) {
                             name = xpp.getText();
-                            Log.e("name" + c3, name);
                             nameArr.add(name);
                             c3++;
                         }
@@ -183,9 +168,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 googleMap.addMarker(markerOptions);
 
-//                if(i == 49){
-//                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(facility));
-//                }
             }
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(cameraZoom));
         }
@@ -199,9 +181,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 googleMap.addMarker(markerOptions);
 
-//                if(i == 49){
-//                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(facility));
-//                }
             }
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(cameraZoom));
         }
