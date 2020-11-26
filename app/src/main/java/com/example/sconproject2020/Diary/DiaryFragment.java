@@ -92,8 +92,9 @@ public class DiaryFragment extends Fragment {
         editor.putString("json", json);
         editor.apply();
 
-        adapter.notifyDataSetChanged();
 
+
+        adapter.notifyDataSetChanged();
         checkShowArr();
 
         diaryAddBtn.setOnClickListener(new View.OnClickListener() {
