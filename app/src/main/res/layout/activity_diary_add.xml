@@ -14,6 +14,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/diarySaveBtn"
         android:id="@+id/titleLayout"
+        app:boxStrokeColor="@color/mainColor"
+        app:hintTextColor="@color/mainColor"
+        app:errorTextColor="#ff0000"
         >
 
         <com.google.android.material.textfield.TextInputEditText

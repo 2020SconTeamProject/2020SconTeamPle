@@ -32,10 +32,15 @@ public class DiaryAddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String title = titleEditText.getText().toString();
                 String content = contentEditText.getText().toString();
-                intent.putExtra("title",title);
-                intent.putExtra("content",content);
-                setResult(100, intent);
-                finish();
+                if(title.equals("")){
+                    titleEditText.setError("제목을 입력하세요");
+                }
+                else{
+                    intent.putExtra("title",title);
+                    intent.putExtra("content",content);
+                    setResult(100, intent);
+                    finish();
+                }
             }
         });
     }

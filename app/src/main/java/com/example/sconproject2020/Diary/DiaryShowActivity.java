@@ -15,7 +15,7 @@ public class DiaryShowActivity extends AppCompatActivity {
     EditText titleEditText, contentEditText;
     Button saveBtn;
     String content, title, previewText;
-    int position;
+    int position, dataArrPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class DiaryShowActivity extends AppCompatActivity {
         content = intent.getStringExtra("content");
         previewText = intent.getStringExtra("previewtext");
         position = Integer.parseInt(intent.getStringExtra("position"));
+        dataArrPos = Integer.parseInt(intent.getStringExtra("dataArrPos"));
 
         titleEditText.setText(title);
         contentEditText.setText(content);
@@ -40,12 +41,18 @@ public class DiaryShowActivity extends AppCompatActivity {
             public void onClick(View view) {
                 title = titleEditText.getText().toString();
                 content = contentEditText.getText().toString();
-                intent.putExtra("title",title);
-                intent.putExtra("content",content);
-                intent.putExtra("position",""+position);
-                intent.putExtra("previewtext",previewText);
-                setResult(200, intent);
-                finish();
+                if (title.equals("")) {
+                    titleEditText.setError("제목을 입력하세요.");
+                }
+                else{
+                    intent.putExtra("title",title);
+                    intent.putExtra("content",content);
+                    intent.putExtra("position",""+position);
+                    intent.putExtra("previewtext",previewText);
+                    intent.putExtra("dataArrPos",""+dataArrPos);
+                    setResult(200, intent);
+                    finish();
+                }
             }
         });
     }
