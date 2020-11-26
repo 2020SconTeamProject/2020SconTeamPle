@@ -41,10 +41,32 @@
                 app:layout_constraintRight_toRightOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="필터 : "
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintRight_toLeftOf="@id/diarySpinner"
+            app:layout_constraintTop_toTopOf="@id/diarySpinner"
+            app:layout_constraintBottom_toBottomOf="@id/diarySpinner"
+            />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/diarySpinner"
+            android:entries="@array/diary_array"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/topLayout"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/topLayout"
+            app:layout_constraintTop_toBottomOf="@id/diarySpinner"
             android:id="@+id/diaryRecyclerView"
             android:layout_marginTop="10dp"
             tools:listitem="@layout/diary_recycler_item"/>

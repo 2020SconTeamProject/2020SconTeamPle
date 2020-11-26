@@ -12,10 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.example.sconproject2020.Calendar.CalendarRecyclerAdapter;
 import com.example.sconproject2020.Calendar.CalendarRecyclerItem;
@@ -34,10 +37,12 @@ public class DiaryFragment extends Fragment {
     private RecyclerView recyclerView;
     private ImageButton diaryAddBtn;
     private ArrayList<DiaryRecyclerItem> dataArray = new ArrayList<>();
+    private ArrayList<DiaryRecyclerItem> showArray = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Gson gson;
     private Type type;
+    private Spinner spinner;
 
     private int year, month, day;
     private String date, json;
@@ -54,24 +59,43 @@ public class DiaryFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences("diary", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        gson = new Gson();
-        type = new TypeToken<ArrayList<DiaryRecyclerItem>>(){}.getType();
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        month++;
 
-        json = sharedPreferences.getString("json",null);
-        if(json != null){
+        gson = new Gson();
+        type = new TypeToken<ArrayList<DiaryRecyclerItem>>() {
+        }.getType();
+
+        json = sharedPreferences.getString("json", null);
+        if (json != null) {
             dataArray.clear();
-            dataArray.addAll(gson.fromJson(json,type));
-        }
-        else{
+            dataArray.addAll(gson.fromJson(json, type));
+        } else {
             dataArray.clear();
         }
 
         recyclerView = view.findViewById(R.id.diaryRecyclerView);
         diaryAddBtn = view.findViewById(R.id.diaryAddBtn);
+        spinner = view.findViewById(R.id.diarySpinner);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new DiaryRecyclerAdapter(dataArray);
+        adapter = new DiaryRecyclerAdapter(showArray);
         recyclerView.setAdapter(adapter);
+
+//        for(int i=1;i<=11;i++){
+//            DiaryRecyclerItem item = new DiaryRecyclerItem("dd"+i,"dd","dd"+i,"2020/"+i+"/26 19:46");
+//            dataArray.add(item);
+//        }
+//        for(int i=10;i<=20;i++){
+//            DiaryRecyclerItem item = new DiaryRecyclerItem(""+i,"dd",""+i,"2020/11/"+i+" 19:46");
+//            dataArray.add(item);
+//        }
+        json = gson.toJson(dataArray);
+        editor.putString("json", json);
+        editor.apply();
 
         adapter.notifyDataSetChanged();
 
@@ -79,7 +103,7 @@ public class DiaryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), DiaryAddActivity.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -87,10 +111,10 @@ public class DiaryFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(getContext(), DiaryShowActivity.class);
-                intent.putExtra("title",dataArray.get(position).getTitle());
-                intent.putExtra("content",dataArray.get(position).getContent());
-                intent.putExtra("previewtext",dataArray.get(position).getPreviewText());
-                intent.putExtra("position",""+position);
+                intent.putExtra("title", showArray.get(position).getTitle());
+                intent.putExtra("content", showArray.get(position).getContent());
+                intent.putExtra("previewtext", showArray.get(position).getPreviewText());
+                intent.putExtra("position", "" + position);
                 startActivityForResult(intent, 2);
             }
 
@@ -102,10 +126,14 @@ public class DiaryFragment extends Fragment {
                 builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dataArray.remove(position);
+                        json = gson.toJson(dataArray);
+                        Log.e("json1",json);
+                        dataArray.remove(showArray.get(position));
+                        showArray.remove(position);
 
                         json = gson.toJson(dataArray);
-                        editor.putString("json",json);
+                        Log.e("json2",json);
+                        editor.putString("json", json);
                         editor.apply();
 
                         adapter.notifyDataSetChanged();
@@ -121,13 +149,100 @@ public class DiaryFragment extends Fragment {
             }
         });
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                if(position == 0){  //모두
+                    Log.e("스피너","모두");
+                    showArray.clear();
+                    showArray.addAll(dataArray);
+                    adapter.notifyDataSetChanged();
+                }
+                else if(position == 1){ //최근 1달
+                    Log.e("스피너","최근1달");
+                    showArray.clear();
+                    for(DiaryRecyclerItem item:dataArray){
+                        String date = item.getDate();
+                        String[] arr = date.split(" ");
+                        String[] dateArr = arr[0].split("/");
+                        Log.e("date",date);
+                        int itemYear = Integer.parseInt(dateArr[0]);
+                        int itemMonth = Integer.parseInt(dateArr[1]);
+                        int itemDay = Integer.parseInt(dateArr[2]);
+                        Log.e("num",""+itemYear+":"+itemMonth+":"+itemDay);
+
+                        if(itemYear >= year-1 && itemMonth >= month-1){
+                            showArray.add(item);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                else if(position == 2){ //최근 1주
+                    Log.e("스피너","최근 1주");
+                    showArray.clear();
+                    for(DiaryRecyclerItem item:dataArray){
+                        String date = item.getDate();
+                        String[] arr = date.split(" ");
+                        String[] dateArr = arr[0].split("/");
+                        Log.e("date",date);
+                        int itemYear = Integer.parseInt(dateArr[0]);
+                        int itemMonth = Integer.parseInt(dateArr[1]);
+                        int itemDay = Integer.parseInt(dateArr[2]);
+                        Log.e("num",""+itemYear+":"+itemMonth+":"+itemDay);
+
+                        if(day >= 8 && month>1){
+                            if(itemYear == year && itemMonth == month && itemDay >= day-7){
+                                showArray.add(item);
+                            }
+                        }
+                        else if(day < 8 && month != 2){
+                            if(itemYear >= year-1 && itemMonth >= month && itemDay >= 23+day){
+                                showArray.add(item);
+                            }
+                        }
+                        else{
+                            if(itemYear >= year-1 && itemMonth >= month && itemDay >= 21+day){
+                                showArray.add(item);
+                            }
+                        }
+
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                else if(position == 3){ //오늘
+                    Log.e("스피너","오늘");
+                    showArray.clear();
+                    for(DiaryRecyclerItem item:dataArray){
+                        String date = item.getDate();
+                        String[] arr = date.split(" ");
+                        String[] dateArr = arr[0].split("/");
+                        Log.e("date",date);
+                        int itemYear = Integer.parseInt(dateArr[0]);
+                        int itemMonth = Integer.parseInt(dateArr[1]);
+                        int itemDay = Integer.parseInt(dateArr[2]);
+                        Log.e("num",""+itemYear+":"+itemMonth+":"+itemDay);
+
+                        if(year == itemYear && month == itemMonth && day == itemDay){
+                            showArray.add(item);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if(requestCode == 1 && resultCode==100){
+        if (requestCode == 1 && resultCode == 100) {
 
             String title = intent.getStringExtra("title");
             String content = intent.getStringExtra("content");
@@ -140,38 +255,50 @@ public class DiaryFragment extends Fragment {
 
             Date now = new Date();
             int hour = now.getHours(), minute = now.getMinutes();
-            date = ""+year+"/"+month+"/"+day+" "+hour+":"+minute;
+            date = "" + year + "/" + month + "/" + day + " " + hour + ":" + minute;
 
             String preview = "";
-            for(int i=0;i<5;i++){
-                if(content.charAt(i) == '\n'){
+            for (int i = 0; i < 5; i++) {
+                if (content.charAt(i) == '\n') {
                     break;
                 }
-                preview = preview+content.charAt(i);
+                preview = preview + content.charAt(i);
             }
-            DiaryRecyclerItem item = new DiaryRecyclerItem(title, preview+"...", content, date);
+            DiaryRecyclerItem item = new DiaryRecyclerItem(title, preview + "...", content, date);
             dataArray.add(item);
+            showArray.add(item);
 
             json = gson.toJson(dataArray);
-            editor.putString("json",json);
+            editor.putString("json", json);
             editor.apply();
 
             adapter.notifyDataSetChanged();
 
         }
 
-        if(requestCode == 2 && resultCode == 200){
+        if (requestCode == 2 && resultCode == 200) {
             String title = intent.getStringExtra("title");
             String content = intent.getStringExtra("content");
             String previewText = intent.getStringExtra("previewtext");
             int position = Integer.parseInt(intent.getStringExtra("position"));
 
-            dataArray.get(position).setContent(content);
-            dataArray.get(position).setTitle(title);
-            dataArray.get(position).setPreviewText(previewText);
+            Calendar calendar = Calendar.getInstance();
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+            month++;
+
+            Date now = new Date();
+            int hour = now.getHours(), minute = now.getMinutes();
+            date = "" + year + "/" + month + "/" + day + " " + hour + ":" + minute;
+
+            showArray.get(position).setContent(content);
+            showArray.get(position).setTitle(title);
+            showArray.get(position).setPreviewText(previewText);
+            showArray.get(position).setDate(date);
 
             json = gson.toJson(dataArray);
-            editor.putString("json",json);
+            editor.putString("json", json);
             editor.apply();
 
             adapter.notifyDataSetChanged();
