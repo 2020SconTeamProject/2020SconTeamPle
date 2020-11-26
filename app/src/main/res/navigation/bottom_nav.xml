@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.sconproject2020.Setting.SettingFragment"
+        android:name="com.example.sconproject2020.Diary.DiaryFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_diary" />
 </navigation>

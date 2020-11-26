@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.example.sconproject2020.Calendar.CalendarFragment;
 import com.example.sconproject2020.Home.HomeFragment;
 import com.example.sconproject2020.Map.MapFragment;
-import com.example.sconproject2020.Setting.SettingFragment;
+import com.example.sconproject2020.Diary.DiaryFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment = new HomeFragment();
     private CalendarFragment calendarFragment = new CalendarFragment();
     private MapFragment mapFragment = new MapFragment();
-    private SettingFragment settingFragment = new SettingFragment();
+    private DiaryFragment diaryFragment = new DiaryFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menuitem_map:
                         transaction.replace(R.id.main_frame, mapFragment).commitAllowingStateLoss();
                         break;
-                    case R.id.menuitem_setting:
-                        transaction.replace(R.id.main_frame, settingFragment).commitAllowingStateLoss();
+                    case R.id.menuitem_diary:
+                        transaction.replace(R.id.main_frame, diaryFragment).commitAllowingStateLoss();
                         break;
                 }
 

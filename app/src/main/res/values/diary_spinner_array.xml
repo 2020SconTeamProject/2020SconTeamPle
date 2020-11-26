@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="diary_array">
+        <item>모두</item>
+        <item>최근 1달</item>
+        <item>최근 1주</item>
+        <item>오늘</item>
+    </string-array>
+
+</resources>

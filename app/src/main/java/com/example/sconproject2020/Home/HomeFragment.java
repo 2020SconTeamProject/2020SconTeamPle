@@ -1,8 +1,10 @@
 package com.example.sconproject2020.Home;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -133,14 +135,82 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(boolean isChecked, int position) {
                 calArr.get(position).setChecked(isChecked);
+                dataArray.get(position).setChecked(isChecked);
                 String jsonText = gson.toJson(calArr);
                 editor.putString(""+date,jsonText);
                 editor.apply();
+
+                if(dataArray.size() != 0){
+                    for(HomeRecyclerItem item:dataArray){
+                        if(!item.isChecked()){
+                            nowTodoTextView.setText("현재 할 일 : "+item.getTodo());
+                            break;
+                        }
+                        else{
+                            nowTodoTextView.setText("모든 계획 완료");
+                        }
+                    }
+                }
+            }
+        });
+
+        adapter.setOnTextViewClickListener(new HomeRecyclerAdapter.OnTextViewClickListener() {
+            @Override
+            public void onClick(int position) {
+                Log.e("tv","클릭"+position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("계획 삭제");
+                builder.setMessage("계획을 삭제하시겠습니까?");
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        calArr.remove(position);
+                        dataArray.remove(position);
+                        Gson gson = new Gson();
+                        String jsonText = gson.toJson(calArr);
+                        editor.putString(""+date,jsonText);
+                        editor.apply();
+
+                        adapter.notifyDataSetChanged();
+
+                        if(dataArray.size() != 0){
+                            for(HomeRecyclerItem item:dataArray){
+                                if(!item.isChecked()){
+                                    nowTodoTextView.setText("현재 할 일 : "+item.getTodo());
+                                    break;
+                                }
+                                else{
+                                    nowTodoTextView.setText("모든 계획 완료");
+                                }
+                            }
+                            noPlanTextView.setText("");
+                        }
+                        else{
+                            nowTodoTextView.setText("");
+                            noPlanTextView.setText("계획이 없습니다.");
+                        }
+                    }
+                });
+                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.show();
             }
         });
 
         if(dataArray.size() != 0){
-            nowTodoTextView.setText("현재 할 일 : "+dataArray.get(0).getTodo());
+            for(HomeRecyclerItem item:dataArray){
+                if(!item.isChecked()){
+                    nowTodoTextView.setText("현재 할 일 : "+item.getTodo());
+                    break;
+                }
+                else{
+                    nowTodoTextView.setText("모든 계획 완료");
+                }
+            }
         }
         else{
             nowTodoTextView.setText("");
