@@ -26,10 +26,20 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     }
 
     private CalendarRecyclerAdapter.OnCheckedChangedListener checkedChangedListener = null;
+    private OnTextViewClickListener mListener;
+
 
     public interface OnCheckedChangedListener{
         void onCheckedChanged(boolean isChecked, int position);
     }
+    public interface OnTextViewClickListener{
+        void onClick(int position);
+    }
+
+    public void setOnTextViewClickListener(OnTextViewClickListener listener){
+        this.mListener = listener;
+    }
+
     public void setOnCheckedChangedListener(CalendarRecyclerAdapter.OnCheckedChangedListener listener){
         this.checkedChangedListener = listener;
     }
@@ -60,7 +70,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView todoTextView, whenTextView;
+        TextView todoTextView, whenTextView, deletePlanTextView;
         CheckBox checkBox;
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,12 +79,25 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             todoTextView = itemView.findViewById(R.id.home_todoTv);
             whenTextView = itemView.findViewById(R.id.home_whenTv);
             checkBox = itemView.findViewById(R.id.home_chkbox);
+            deletePlanTextView = itemView.findViewById(R.id.home_deletePlan);
+
+            deletePlanTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onClick(pos);
+                        }
+                    }
+                }
+            });
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     int pos = getAdapterPosition();
-                    Log.e("pos",""+pos);
 
                     if(pos != RecyclerView.NO_POSITION){
                         if(checkedChangedListener != null){

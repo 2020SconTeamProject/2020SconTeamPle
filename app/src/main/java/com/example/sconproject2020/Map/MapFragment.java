@@ -64,6 +64,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         playGroundChkBox.setChecked(false);
         kidHouseChkBox.setChecked(false);
 
+        Log.e("kcChecked",""+kidCafeChkBox.isChecked());
+        Log.e("kgChecked",""+kinderGardenChkBox.isChecked());
+        Log.e("phChkecd",""+playGroundChkBox.isChecked());
+        Log.e("khChecked",""+kidHouseChkBox.isChecked());
+
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
