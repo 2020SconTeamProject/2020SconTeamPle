@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fromEditText"
-            android:hint="시작 시간"
+            android:hint="시작 날짜"
             android:focusable="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/ToEditText"
-            android:hint="종료 시간"
+            android:hint="종료 날짜"
             android:focusable="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"/>
     </com.google.android.material.textfield.TextInputLayout>

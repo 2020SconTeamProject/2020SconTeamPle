@@ -17,10 +17,10 @@
             android:value="AIzaSyBuQVb2lqKDniMAlma6_v0Xzfi2Ct_I_8s" />
 
         <activity android:name=".Calendar.PlanAddActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="베이비 빌리지">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
