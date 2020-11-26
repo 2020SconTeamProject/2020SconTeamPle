@@ -156,7 +156,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 googleMap.addMarker(markerOptions);
 
             }
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(cameraZoom));
         }
         if(kc){
             for(i=0;i < 50;i++){
@@ -169,7 +168,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 googleMap.addMarker(markerOptions);
 
             }
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(cameraZoom));
         }
         if(kh){
             for(i=0;i < 49;i++){
@@ -182,7 +180,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 googleMap.addMarker(markerOptions);
 
             }
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(cameraZoom));
         }
         if(pg){
             for(i=0;i < 50;i++){
@@ -195,7 +192,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 googleMap.addMarker(markerOptions);
 
             }
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(cameraZoom));
         }
     }
 

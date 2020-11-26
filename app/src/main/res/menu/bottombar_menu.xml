@@ -22,9 +22,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/menuitem_setting"
-        android:icon="@drawable/selector_setting"
-        android:title="설정"
+        android:id="@+id/menuitem_diary"
+        android:icon="@drawable/selector_diary"
+        android:title="일기"
         app:showAsAction="ifRoom"/>
 
 </menu>
